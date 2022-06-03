@@ -65,9 +65,46 @@ ALTER TABLE Employee_Payroll ADD Taxable_Pay int not null default 0 ;
 
 ALTER TABLE Employee_Payroll ADD Net_Pay int not null default 0 ;
 
---uc10
 Insert into Employee_Payroll
 (Name,Salary,StartDate,Gender,PhoneNumber,Department,Deduction,Taxable_Pay,Net_Pay) Values
 ('Bikash',55000,'2022.06.30','M','9800235461','',1250,200,450000);
 
 select * from Employee_payroll;
+
+--UC10
+update Employee_payroll set Name = 'Terisa',Gender = 'F' where Id = 4;
+
+alter table Employee_payroll Drop column Department;
+
+create table Department(
+deptID INT Primary key identity(1,1),
+DepartmentName varchar(50)
+);
+
+insert into Department values
+('Marketing'),
+('Sales');
+
+create table EmpAndDept(
+empID INT,
+deptID INT
+);
+
+alter table EmpAndDept ADD FOREIGN KEY (empID)
+REFERENCES Employee_payroll(Id);
+alter table EmpAndDept ADD FOREIGN KEY (deptID)
+REFERENCES Department(deptID);
+
+insert into EmpAndDept values
+(4,1),
+(4,2);
+
+select * from Employee_payroll INNER JOIN
+EmpAndDept on Employee_payroll.Id = EmpAndDept.empID INNER JOIN
+Department ON Department.deptID = EmpAndDept.deptID
+
+Create procedure spGetAllEmployees
+as
+begin
+select * from Employee_payroll
+END
